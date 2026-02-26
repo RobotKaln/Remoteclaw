@@ -1,19 +1,25 @@
 [Unit]
 Description=RemoteClaw e-Paper Display Service
-After=network.target
+After=network.target openclaw-gateway.service
+Wants=network.target
 
 [Service]
 Type=simple
-User=magic
-Group=magic
-WorkingDirectory=/home/magic/Remoteclaw
-ExecStart=/usr/bin/env python3 /home/magic/Remoteclaw/display_service.py
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/Remoteclaw
+Environment=PYTHONUNBUFFERED=1
+Environment=DISPLAY=:0
+Environment=PYTHONPATH=/home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib
+
+ExecStart=/usr/bin/python3 /home/pi/Remoteclaw/display_service.py
+ExecStop=/usr/bin/pkill -f display_service.py
+
 Restart=always
 RestartSec=10
 
-Environment=&quot;PYTHONPATH=/home/magic/waveshare-epaper/RaspberryPi/python/lib&quot;
-StandardOutput=journal
-StandardError=journal
+# Give service time to initialize display
+TimeoutStartSec=30
 
 [Install]
 WantedBy=multi-user.target
