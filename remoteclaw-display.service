@@ -1,0 +1,19 @@
+[Unit]
+Description=RemoteClaw e-Paper Display Service
+After=network.target
+
+[Service]
+Type=simple
+User=magic
+Group=magic
+WorkingDirectory=/home/magic/Remoteclaw
+ExecStart=/usr/bin/env python3 /home/magic/Remoteclaw/display_service.py
+Restart=always
+RestartSec=10
+
+Environment=&quot;PYTHONPATH=/home/magic/waveshare-epaper/RaspberryPi/python/lib&quot;
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
